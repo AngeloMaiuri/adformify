@@ -173,17 +173,27 @@ export class AdForm extends Selenium {
       );
       await delay(this.delay);
 
-      // Wait until Add clicktag shows up & click
-      await this.waitForElementAndClick(By.xpath("//*[@ng-click='addClicktag()']"), "script");
+      // Wait until Adformify modal shows up
+      await this.waitForElementAndClick(By.xpath("//*[@ng-click='toggleClicktag()']"), "script");
       await delay(this.miniDelay);
 
-      // Get Add clicktag input field
-      const clicktagInput = await this.waitForElementAndGet(By.xpath("//*[@ng-model='clickTag.url']"));
-      await clicktagInput.sendKeys(this.CTA);
+      // Choose new clicktag
+      await this.waitForElementAndClick(By.xpath("//*[@ng-model='settings.clicktag']"));
+      await delay(this.miniDelay);
+      await this.waitForElementAndClick(By.xpath(`//*[@data-title="New" and @data-value="'New'"]`));
+      await delay(this.miniDelay);
 
-      // Click Save button
-      await this.waitForElementAndClick(By.xpath("//*[@ng-click='saveComponentSettings()']"));
-      await delay(this.downloadDelay);
+      // insert clicktag name
+      const clicktagName = await this.waitForElementAndGet(By.xpath("//*[@ng-model='settings.clicktag.name']"));
+      await clicktagName.sendKeys('clickTAG');
+
+      // insert clicktag url
+      const clicktagUrl = await this.waitForElementAndGet(By.xpath("//*[@ng-model='settings.clicktag.url']"));
+      await clicktagUrl.sendKeys(this.CTA);
+
+      // click proceed
+      await this.waitForElementAndClick(By.xpath("//*[@ng-click='save()' and text()='Proceed']"), "script");
+      await delay(5000);
 
       // Download the banner
       await this.waitForElementAndClick(By.xpath("//*[@ng-click='downloadBanner()' and contains(text(), 'Export')]"), "script");

@@ -225,17 +225,27 @@ class AdForm extends Selenium {
         yield _this8.waitForElementAndClick(_seleniumWebdriver.By.xpath("//*[@ng-controller='BannerFormatSelectController as vm']//button[contains(text(), 'Upload')]"));
         yield (0, _helpers.delay)(_this8.delay);
 
-        // Wait until Add clicktag shows up & click
-        yield _this8.waitForElementAndClick(_seleniumWebdriver.By.xpath("//*[@ng-click='addClicktag()']"), "script");
+        // Wait until Adformify modal shows up
+        yield _this8.waitForElementAndClick(_seleniumWebdriver.By.xpath("//*[@ng-click='toggleClicktag()']"), "script");
         yield (0, _helpers.delay)(_this8.miniDelay);
 
-        // Get Add clicktag input field
-        const clicktagInput = yield _this8.waitForElementAndGet(_seleniumWebdriver.By.xpath("//*[@ng-model='clickTag.url']"));
-        yield clicktagInput.sendKeys(_this8.CTA);
+        // Choose new clicktag
+        yield _this8.waitForElementAndClick(_seleniumWebdriver.By.xpath("//*[@ng-model='settings.clicktag']"));
+        yield (0, _helpers.delay)(_this8.miniDelay);
+        yield _this8.waitForElementAndClick(_seleniumWebdriver.By.xpath(`//*[@data-title="New" and @data-value="'New'"]`));
+        yield (0, _helpers.delay)(_this8.miniDelay);
 
-        // Click Save button
-        yield _this8.waitForElementAndClick(_seleniumWebdriver.By.xpath("//*[@ng-click='saveComponentSettings()']"));
-        yield (0, _helpers.delay)(_this8.downloadDelay);
+        // insert clicktag name
+        const clicktagName = yield _this8.waitForElementAndGet(_seleniumWebdriver.By.xpath("//*[@ng-model='settings.clicktag.name']"));
+        yield clicktagName.sendKeys('clickTAG');
+
+        // insert clicktag url
+        const clicktagUrl = yield _this8.waitForElementAndGet(_seleniumWebdriver.By.xpath("//*[@ng-model='settings.clicktag.url']"));
+        yield clicktagUrl.sendKeys(_this8.CTA);
+
+        // click proceed
+        yield _this8.waitForElementAndClick(_seleniumWebdriver.By.xpath("//*[@ng-click='save()' and text()='Proceed']"), "script");
+        yield (0, _helpers.delay)(5000);
 
         // Download the banner
         yield _this8.waitForElementAndClick(_seleniumWebdriver.By.xpath("//*[@ng-click='downloadBanner()' and contains(text(), 'Export')]"), "script");
